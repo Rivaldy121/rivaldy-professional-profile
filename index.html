@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rivaldy Cahya Saputra — Embedded Systems &amp; IoT Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A1512;
+    --surface:#0E1E19;
+    --surface-alt:#12271F;
+    --line:#20392F;
+    --copper:#C87F4A;
+    --copper-bright:#E7A468;
+    --silk:#EDF2EE;
+    --trace:#4CAF7D;
+    --muted:#7E9A8D;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--silk);
+    font-family:var(--sans);
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  /* background trace pattern */
+  .pcb-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:48px 48px;
+    opacity:0.25;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 20%, black 0%, transparent 75%);
+  }
+
+  a{color:var(--copper-bright); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--trace); outline-offset:3px;}
+
+  .wrap{max-width:1040px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
+
+  /* NAV */
+  header.nav{
+    position:sticky; top:0; z-index:10;
+    background:rgba(10,21,18,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1040px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:var(--mono); font-size:13px; letter-spacing:0.02em;
+  }
+  .nav-inner .tag{color:var(--copper-bright);}
+  .nav-links{display:flex; gap:22px; list-style:none;}
+  .nav-links a{color:var(--muted); font-weight:500;}
+  .nav-links a:hover{color:var(--silk); text-decoration:none;}
+  .led{
+    display:inline-block; width:7px; height:7px; border-radius:50%;
+    background:var(--trace); margin-right:8px;
+    box-shadow:0 0 6px var(--trace);
+    animation:blink 2.6s ease-in-out infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;} 50%{opacity:0.25;}}
+
+  /* HERO */
+  .hero{padding:76px 0 40px; position:relative;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; color:var(--muted);
+    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:var(--mono); font-weight:700;
+    font-size:clamp(28px, 5vw, 46px);
+    line-height:1.15; color:var(--silk); max-width:820px;
+  }
+  .hero h1 .accent{color:var(--copper-bright);}
+  .hero-sub{
+    margin-top:16px; color:var(--muted); font-size:16px; max-width:560px;
+  }
+  .hero-contact{
+    margin-top:26px; display:flex; flex-wrap:wrap; gap:10px 22px;
+    font-family:var(--mono); font-size:13px;
+  }
+  .hero-contact span{color:var(--muted);}
+
+  /* CHIP DIAGRAM */
+  .chip-section{padding:20px 0 60px;}
+  .chip-wrap{
+    display:flex; justify-content:center; padding:10px 0;
+  }
+  svg.chip{width:100%; max-width:760px; height:auto; display:block;}
+  .chip-body{fill:var(--surface-alt); stroke:var(--line); stroke-width:1.5;}
+  .chip-notch{fill:none; stroke:var(--copper); stroke-width:2;}
+  .pin{stroke:var(--copper); stroke-width:2;}
+  .pin-label{font-family:var(--mono); font-size:11px; fill:var(--muted);}
+  .pin-label.hi{fill:var(--silk);}
+  .chip-title{font-family:var(--mono); font-weight:700; fill:var(--silk);}
+  .chip-sub{font-family:var(--mono); fill:var(--muted); font-size:11px;}
+  .pin-dot{fill:var(--copper-bright);}
+
+  /* SECTIONS */
+  section{padding:64px 0; border-top:1px solid var(--line); position:relative;}
+  .sec-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:30px;
+  }
+  .sec-num{font-family:var(--mono); color:var(--copper); font-size:13px;}
+  .sec-title{
+    font-family:var(--mono); font-weight:700; font-size:22px; color:var(--silk);
+    text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .sec-desc{color:var(--muted); font-size:14px; margin-top:-16px; margin-bottom:28px; max-width:560px;}
+
+  /* SUMMARY */
+  .summary-text{font-size:16px; max-width:700px; color:var(--silk);}
+  .summary-text strong{color:var(--copper-bright); font-weight:600;}
+
+  /* REVISION HISTORY (experience) */
+  .rev-table{width:100%; border-collapse:collapse; font-size:14px;}
+  .rev-table thead th{
+    text-align:left; font-family:var(--mono); font-size:11px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:0.08em; padding:0 12px 12px;
+    border-bottom:1px solid var(--line);
+  }
+  .rev-table td{padding:16px 12px; vertical-align:top; border-bottom:1px solid var(--line);}
+  .rev-tag{
+    font-family:var(--mono); font-weight:700; color:var(--copper-bright);
+    background:var(--surface); border:1px solid var(--line); border-radius:4px;
+    padding:2px 8px; display:inline-block; font-size:13px;
+  }
+  .rev-date{font-family:var(--mono); color:var(--muted); font-size:13px; white-space:nowrap;}
+  .rev-role{font-weight:600; color:var(--silk); margin-bottom:2px;}
+  .rev-org{color:var(--copper-bright); font-size:13px; margin-bottom:8px;}
+  .rev-notes{list-style:none; color:var(--muted); font-size:13.5px; display:flex; flex-direction:column; gap:5px;}
+  .rev-notes li{padding-left:14px; position:relative;}
+  .rev-notes li::before{content:'›'; position:absolute; left:0; color:var(--trace);}
+
+  /* BOM skills table */
+  .bom-table{width:100%; border-collapse:collapse; font-size:14px;}
+  .bom-table thead th{
+    text-align:left; font-family:var(--mono); font-size:11px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:0.08em; padding:0 12px 12px;
+    border-bottom:1px solid var(--line);
+  }
+  .bom-table td{padding:13px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  .bom-des{font-family:var(--mono); color:var(--copper-bright); font-weight:600; white-space:nowrap;}
+  .bom-cat{color:var(--silk); font-weight:500; white-space:nowrap;}
+  .bom-spec{color:var(--muted);}
+
+  /* two column grid for education/awards */
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  @media (max-width:720px){.grid-2{grid-template-columns:1fr;}}
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:6px;
+    padding:22px;
+  }
+  .card h3{font-family:var(--mono); font-size:15px; color:var(--silk); margin-bottom:6px;}
+  .card .meta{font-family:var(--mono); font-size:12px; color:var(--muted); margin-bottom:10px;}
+  .card p{font-size:14px; color:var(--muted);}
+  .award-item{display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line);}
+  .award-item:last-child{border-bottom:none;}
+  .award-dot{
+    width:8px; height:8px; border-radius:50%; background:var(--copper);
+    margin-top:6px; flex-shrink:0;
+  }
+  .award-item h4{font-size:14.5px; color:var(--silk); font-weight:600;}
+  .award-item .meta{font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:3px;}
+
+  /* portfolio links */
+  .port-list{display:flex; flex-direction:column; gap:1px;}
+  .port-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px; background:var(--surface); border:1px solid var(--line);
+    border-radius:4px; margin-bottom:10px; transition:border-color 0.2s, transform 0.15s;
+  }
+  .port-row:hover{border-color:var(--copper); transform:translateX(4px);}
+  .port-row a{color:var(--silk); font-weight:600; font-size:15px; text-decoration:none;}
+  .port-row a:hover{color:var(--copper-bright);}
+  .port-tag{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
+  .port-arrow{font-family:var(--mono); color:var(--copper); font-size:18px;}
+
+  /* footer */
+  footer{padding:50px 0 60px; text-align:center;}
+  footer .foot-name{font-family:var(--mono); color:var(--silk); font-weight:600; font-size:15px;}
+  footer .foot-links{
+    margin-top:14px; display:flex; justify-content:center; gap:22px;
+    font-family:var(--mono); font-size:13px;
+  }
+  footer .foot-tag{margin-top:24px; font-family:var(--mono); font-size:11px; color:var(--muted);}
+
+  ::selection{background:var(--copper); color:#0A1512;}
+</style>
+</head>
+<body>
+
+<div class="pcb-bg"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <span class="tag"><span class="led"></span>RCS-IOT01 // ONLINE</span>
+    <ul class="nav-links">
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" id="top" style="border-top:none;">
+    <div class="eyebrow">DATASHEET · REV. 2026 · KOTA BEKASI, ID</div>
+    <h1>Rivaldy Cahya Saputra<br><span class="accent">Embedded Systems &amp; IoT Engineer</span></h1>
+    <p class="hero-sub">4+ years designing firmware, electronics, and connected devices on ESP32 and Arduino — from sensor to server, prototype to production.</p>
+    <div class="hero-contact">
+      <span>TEL <a href="tel:+6285283789038">+62 852-8378-9038</a></span>
+      <span>MAIL <a href="mailto:rivaldy.saputra@gmail.com">rivaldy.saputra@gmail.com</a></span>
+      <span>LINKEDIN <a href="https://www.linkedin.com/in/rivaldy-saputra/" target="_blank" rel="noopener">/rivaldy-saputra</a></span>
+      <span>GITHUB <a href="https://github.com/Rivaldy121" target="_blank" rel="noopener">/Rivaldy121</a></span>
+    </div>
+  </section>
+
+  <section class="chip-section" style="border-top:none;">
+    <div class="chip-wrap">
+      <svg class="chip" viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pinout diagram summarizing core technical skills">
+        <!-- top pins -->
+        <g>
+          <line class="pin" x1="220" y1="60" x2="220" y2="115"/>
+          <circle class="pin-dot" cx="220" cy="60" r="3"/>
+          <text class="pin-label hi" x="220" y="48" text-anchor="middle">C/C++</text>
+
+          <line class="pin" x1="300" y1="60" x2="300" y2="115"/>
+          <circle class="pin-dot" cx="300" cy="60" r="3"/>
+          <text class="pin-label hi" x="300" y="48" text-anchor="middle">PYTHON</text>
+
+          <line class="pin" x1="380" y1="60" x2="380" y2="115"/>
+          <circle class="pin-dot" cx="380" cy="60" r="3"/>
+          <text class="pin-label hi" x="380" y="48" text-anchor="middle">NODE.JS</text>
+
+          <line class="pin" x1="460" y1="60" x2="460" y2="115"/>
+          <circle class="pin-dot" cx="460" cy="60" r="3"/>
+          <text class="pin-label hi" x="460" y="48" text-anchor="middle">GIT</text>
+
+          <line class="pin" x1="540" y1="60" x2="540" y2="115"/>
+          <circle class="pin-dot" cx="540" cy="60" r="3"/>
+          <text class="pin-label hi" x="540" y="48" text-anchor="middle">SQL</text>
+        </g>
+
+        <!-- bottom pins -->
+        <g>
+          <line class="pin" x1="220" y1="360" x2="220" y2="305"/>
+          <circle class="pin-dot" cx="220" cy="360" r="3"/>
+          <text class="pin-label" x="220" y="378" text-anchor="middle">MQTT</text>
+
+          <line class="pin" x1="300" y1="360" x2="300" y2="305"/>
+          <circle class="pin-dot" cx="300" cy="360" r="3"/>
+          <text class="pin-label" x="300" y="378" text-anchor="middle">REST API</text>
+
+          <line class="pin" x1="380" y1="360" x2="380" y2="305"/>
+          <circle class="pin-dot" cx="380" cy="360" r="3"/>
+          <text class="pin-label" x="380" y="378" text-anchor="middle">WI-FI</text>
+
+          <line class="pin" x1="460" y1="360" x2="460" y2="305"/>
+          <circle class="pin-dot" cx="460" cy="360" r="3"/>
+          <text class="pin-label" x="460" y="378" text-anchor="middle">ETHERNET</text>
+
+          <line class="pin" x1="540" y1="360" x2="540" y2="305"/>
+          <circle class="pin-dot" cx="540" cy="360" r="3"/>
+          <text class="pin-label" x="540" y="378" text-anchor="middle">SERIAL</text>
+        </g>
+
+        <!-- left pins -->
+        <g>
+          <line class="pin" x1="60" y1="150" x2="140" y2="150"/>
+          <circle class="pin-dot" cx="60" cy="150" r="3"/>
+          <text class="pin-label hi" x="46" y="154" text-anchor="end">ESP32</text>
+
+          <line class="pin" x1="60" y1="195" x2="140" y2="195"/>
+          <circle class="pin-dot" cx="60" cy="195" r="3"/>
+          <text class="pin-label" x="46" y="199" text-anchor="end">ESP8266</text>
+
+          <line class="pin" x1="60" y1="240" x2="140" y2="240"/>
+          <circle class="pin-dot" cx="60" cy="240" r="3"/>
+          <text class="pin-label" x="46" y="244" text-anchor="end">ARDUINO</text>
+
+          <line class="pin" x1="60" y1="285" x2="140" y2="285"/>
+          <circle class="pin-dot" cx="60" cy="285" r="3"/>
+          <text class="pin-label" x="46" y="289" text-anchor="end">STM32</text>
+        </g>
+
+        <!-- right pins -->
+        <g>
+          <line class="pin" x1="700" y1="170" x2="620" y2="170"/>
+          <circle class="pin-dot" cx="700" cy="170" r="3"/>
+          <text class="pin-label hi" x="714" y="174" text-anchor="start">RASPBERRY PI</text>
+
+          <line class="pin" x1="700" y1="215" x2="620" y2="215"/>
+          <circle class="pin-dot" cx="700" cy="215" r="3"/>
+          <text class="pin-label" x="714" y="219" text-anchor="start">PCB DESIGN</text>
+
+          <line class="pin" x1="700" y1="260" x2="620" y2="260"/>
+          <circle class="pin-dot" cx="700" cy="260" r="3"/>
+          <text class="pin-label" x="714" y="264" text-anchor="start">SENSOR INTEG.</text>
+        </g>
+
+        <!-- chip body -->
+        <rect class="chip-body" x="140" y="115" width="480" height="190" rx="6"/>
+        <path class="chip-notch" d="M 340 115 A 40 40 0 0 0 420 115"/>
+        <text class="chip-title" x="380" y="200" text-anchor="middle" font-size="20">RCS-IOT01</text>
+        <text class="chip-sub" x="380" y="222" text-anchor="middle">IOT ENGINEER · 4+ YRS PACKAGE</text>
+        <text class="chip-sub" x="380" y="242" text-anchor="middle">UNIVERSITAS PAMULANG · B.ENG</text>
+      </svg>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">Summary</h2></div>
+    <p class="summary-text">Embedded Systems and IoT Engineer with <strong>4+ years of experience</strong> designing and developing embedded solutions using <strong>ESP32, Arduino, and sensor-based systems</strong>. Experienced across firmware development, electronics design, hardware integration, IoT communication, backend integration, and deployment of embedded applications. Passionate about building reliable embedded systems and continuously learning modern technologies to deliver innovative engineering solutions.</p>
+  </section>
+
+  <section id="experience">
+    <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Revision History</h2></div>
+    <p class="sec-desc">Career progression, logged like firmware revisions — newest first.</p>
+    <table class="rev-table">
+      <thead>
+        <tr><th style="width:60px;">Rev</th><th style="width:130px;">Date</th><th>Role &amp; Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rev-tag">A</span></td>
+          <td class="rev-date">Jun 2022 –<br>Present</td>
+          <td>
+            <div class="rev-role">IoT Engineer &amp; IT Infrastructure Staff</div>
+            <div class="rev-org">PT. Dian Prima Jayaraya (Dartmedia)</div>
+            <ul class="rev-notes">
+              <li>Designed and developed IoT products on ESP32 and Arduino to client requirements</li>
+              <li>Ran hardware research, prototyping, testing, and validation for embedded systems</li>
+              <li>Maintained IT infrastructure — servers, networking, workstations, data center equipment</li>
+              <li>Performed web application vulnerability assessments and security reports</li>
+              <li>Deployed applications on-premise on client's servers</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rev-tag">B</span></td>
+          <td class="rev-date">Jan 2021 –<br>Dec 2021</td>
+          <td>
+            <div class="rev-role">Engineering Staff</div>
+            <div class="rev-org">BPPT — Electronics Technology Center (PTE)</div>
+            <ul class="rev-notes">
+              <li>Data collection, tracing, distribution, and inventory of State Property</li>
+              <li>Prepared Terms of Reference for the CBT / INA-TEWS optical cable tender</li>
+              <li>Prepared modular test and integration procedures for the Ocean Bottom Unit (OBU) in the Indonesia Tsunami Early Warning System</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rev-tag">C</span></td>
+          <td class="rev-date">May 2015 –<br>Dec 2020</td>
+          <td>
+            <div class="rev-role">Technician</div>
+            <div class="rev-org">South Tangerang General Hospital</div>
+            <ul class="rev-notes">
+              <li>Inspection, preventive maintenance, calibration scheduling, and minor repairs on medical equipment</li>
+              <li>Maintained medical gas installations, electrical systems, HVAC, and water lines</li>
+              <li>Installed and repaired IP-phone and CCTV systems</li>
+              <li>Estimated medical gas needs and vetted procurement of goods and services</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="skills">
+    <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">Bill of Materials</h2></div>
+    <p class="sec-desc">Core technical components, by designator.</p>
+    <table class="bom-table">
+      <thead>
+        <tr><th style="width:60px;">Ref</th><th style="width:170px;">Category</th><th>Specification</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="bom-des">U1</td><td class="bom-cat">Embedded Systems</td><td class="bom-spec">ESP32, ESP8266, Arduino, STM32F103, Raspberry Pi</td></tr>
+        <tr><td class="bom-des">U2</td><td class="bom-cat">Programming</td><td class="bom-spec">C/C++ (Arduino Framework), Python, JavaScript (Node.js), web app penetration testing</td></tr>
+        <tr><td class="bom-des">U3</td><td class="bom-cat">Operating System</td><td class="bom-spec">Windows, Linux (Ubuntu, RHEL, Raspberry Pi OS)</td></tr>
+        <tr><td class="bom-des">U4</td><td class="bom-cat">Electronics</td><td class="bom-spec">PCB design (Autodesk Eagle), sensor integration, circuit troubleshooting</td></tr>
+        <tr><td class="bom-des">U5</td><td class="bom-cat">IoT Communication</td><td class="bom-spec">MQTT, HTTP REST API, Wi-Fi, Ethernet, serial communication</td></tr>
+        <tr><td class="bom-des">U6</td><td class="bom-cat">Database</td><td class="bom-spec">MySQL, PostgreSQL</td></tr>
+        <tr><td class="bom-des">U7</td><td class="bom-cat">Tools</td><td class="bom-spec">Git, Autodesk Fusion 360, Autodesk Inventor, 3D printing</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="education">
+    <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">Education &amp; Awards</h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Bachelor of Electrical Engineering</h3>
+        <div class="meta">Universitas Pamulang · Sep 2013 – Sep 2017</div>
+        <p>GPA 3.54 / 4.00</p>
+      </div>
+      <div class="card">
+        <h3>Awards</h3>
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div>
+            <h4>1st Award, Appropriate Technology Competition — City Level</h4>
+            <div class="meta">South Tangerang City Government · April 2018</div>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div>
+            <h4>2nd Award, Appropriate Technology Competition — Province Level</h4>
+            <div class="meta">Banten Province Government · July 2018</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title">Portfolio</h2></div>
+    <div class="port-list">
+      <div class="port-row">
+        <div>
+          <div class="port-tag">Video Demonstrations</div>
+          <a href="https://www.youtube.com/playlist?list=PLTf_gbO9UAL0k1HaCqXKsIwz7MoEYVdws" target="_blank" rel="noopener">YouTube Project Playlist</a>
+        </div>
+        <span class="port-arrow">↗</span>
+      </div>
+      <div class="port-row">
+        <div>
+          <div class="port-tag">Live Demo</div>
+          <a href="https://frontend-dashboard-absensi.vercel.app/dashboard.html" target="_blank" rel="noopener">Attendance Dashboard</a>
+        </div>
+        <span class="port-arrow">↗</span>
+      </div>
+      <div class="port-row">
+        <div>
+          <div class="port-tag">Source Code</div>
+          <a href="https://github.com/Rivaldy121" target="_blank" rel="noopener">github.com/Rivaldy121</a>
+        </div>
+        <span class="port-arrow">↗</span>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="foot-name">Rivaldy Cahya Saputra</div>
+    <div class="foot-links">
+      <a href="mailto:rivaldy.saputra@gmail.com">Email</a>
+      <a href="tel:+6285283789038">Phone</a>
+      <a href="https://www.linkedin.com/in/rivaldy-saputra/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Rivaldy121" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-tag">RCS-IOT01 · KOTA BEKASI, INDONESIA</div>
+  </footer>
+
+</main>
+
+</body>
+</html>
